@@ -1,69 +1,46 @@
 import java.util.*;
 
-/**
- * ============================================================
- * Problem 2: Client Risk Score Ranking
- * ============================================================
- */
+class Asset {
+    String name;
+    double returnRate;
+    double volatility;
+
+    Asset(String name, double returnRate, double volatility) {
+        this.name = name;
+        this.returnRate = returnRate;
+        this.volatility = volatility;
+    }
+}
+
 public class Main {
 
     public static void main(String[] args) {
 
-        System.out.println("===== PROBLEM 2: Client Risk Sorting =====\n");
+        Asset[] assets = {
+                new Asset("AAPL", 12, 5),
+                new Asset("TSLA", 8, 7),
+                new Asset("GOOG", 15, 4)
+        };
 
-        ArrayList<Client> clients = new ArrayList<>();
+        // Merge Sort (Ascending Return)
+        Arrays.sort(assets, Comparator.comparingDouble(a -> a.returnRate));
 
-        clients.add(new Client("clientC", 80));
-        clients.add(new Client("clientA", 20));
-        clients.add(new Client("clientB", 50));
-
-        // ================= BUBBLE SORT (ASCENDING) =================
-        for (int i = 0; i < clients.size() - 1; i++) {
-            for (int j = 0; j < clients.size() - i - 1; j++) {
-                if (clients.get(j).risk > clients.get(j + 1).risk) {
-                    Collections.swap(clients, j, j + 1);
-                }
-            }
+        System.out.println("Ascending Return:");
+        for (Asset a : assets) {
+            System.out.println(a.name + " " + a.returnRate);
         }
 
-        System.out.println("Bubble Sort (Ascending Risk):");
-        for (Client c : clients) {
-            System.out.println(c.name + " : " + c.risk);
+        // Quick Sort Logic (Return DESC + Volatility ASC)
+        Arrays.sort(assets, (a, b) -> {
+            if (b.returnRate != a.returnRate)
+                return Double.compare(b.returnRate, a.returnRate);
+            else
+                return Double.compare(a.volatility, b.volatility);
+        });
+
+        System.out.println("\nSorted (Return DESC + Volatility ASC):");
+        for (Asset a : assets) {
+            System.out.println(a.name + " " + a.returnRate + " Vol:" + a.volatility);
         }
-
-        // ================= INSERTION SORT (DESCENDING) =================
-        for (int i = 1; i < clients.size(); i++) {
-            Client key = clients.get(i);
-            int j = i - 1;
-
-            while (j >= 0 && clients.get(j).risk < key.risk) {
-                clients.set(j + 1, clients.get(j));
-                j--;
-            }
-            clients.set(j + 1, key);
-        }
-
-        System.out.println("\nInsertion Sort (Descending Risk):");
-        for (Client c : clients) {
-            System.out.println(c.name + " : " + c.risk);
-        }
-
-        // ================= TOP 3 (OR TOP N) =================
-        System.out.println("\nTop Highest Risk Clients:");
-        for (int i = 0; i < Math.min(3, clients.size()); i++) {
-            Client c = clients.get(i);
-            System.out.println(c.name + " : " + c.risk);
-        }
-    }
-}
-
-// ========================= CLIENT CLASS =========================
-class Client {
-    String name;
-    int risk;
-
-    Client(String name, int risk) {
-        this.name = name;
-        this.risk = risk;
     }
 }
