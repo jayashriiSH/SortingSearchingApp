@@ -1,35 +1,46 @@
 import java.util.*;
 
+class Asset {
+    String name;
+    double returnRate;
+    double volatility;
+
+    Asset(String name, double returnRate, double volatility) {
+        this.name = name;
+        this.returnRate = returnRate;
+        this.volatility = volatility;
+    }
+}
+
 public class Main {
 
     public static void main(String[] args) {
 
-        int[] trades = {500, 100, 300};
+        Asset[] assets = {
+                new Asset("AAPL", 12, 5),
+                new Asset("TSLA", 8, 7),
+                new Asset("GOOG", 15, 4)
+        };
 
-        // -------- Merge Sort (Ascending) --------
-        Arrays.sort(trades);
-        System.out.println("Merge Sort (Ascending): " + Arrays.toString(trades));
+        // Merge Sort (Ascending Return)
+        Arrays.sort(assets, Comparator.comparingDouble(a -> a.returnRate));
 
-        // -------- Quick Sort (Descending) --------
-        Arrays.sort(trades);
-        reverse(trades);
-        System.out.println("Quick Sort (Descending): " + Arrays.toString(trades));
+        System.out.println("Ascending Return:");
+        for (Asset a : assets) {
+            System.out.println(a.name + " " + a.returnRate);
+        }
 
-        // -------- Total --------
-        int sum = 0;
-        for (int t : trades) sum += t;
+        // Quick Sort Logic (Return DESC + Volatility ASC)
+        Arrays.sort(assets, (a, b) -> {
+            if (b.returnRate != a.returnRate)
+                return Double.compare(b.returnRate, a.returnRate);
+            else
+                return Double.compare(a.volatility, b.volatility);
+        });
 
-        System.out.println("Total Volume: " + sum);
-    }
-
-    public static void reverse(int[] arr) {
-        int l = 0, r = arr.length - 1;
-        while (l < r) {
-            int temp = arr[l];
-            arr[l] = arr[r];
-            arr[r] = temp;
-            l++;
-            r--;
+        System.out.println("\nSorted (Return DESC + Volatility ASC):");
+        for (Asset a : assets) {
+            System.out.println(a.name + " " + a.returnRate + " Vol:" + a.volatility);
         }
     }
 }
