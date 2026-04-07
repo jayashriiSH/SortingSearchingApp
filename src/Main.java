@@ -1,46 +1,36 @@
 import java.util.*;
 
-class Asset {
-    String name;
-    double returnRate;
-    double volatility;
-
-    Asset(String name, double returnRate, double volatility) {
-        this.name = name;
-        this.returnRate = returnRate;
-        this.volatility = volatility;
-    }
-}
-
 public class Main {
 
     public static void main(String[] args) {
 
-        Asset[] assets = {
-                new Asset("AAPL", 12, 5),
-                new Asset("TSLA", 8, 7),
-                new Asset("GOOG", 15, 4)
-        };
+        String[] logs = {"accB", "accA", "accB", "accC"};
+        String target = "accB";
 
-        // Merge Sort (Ascending Return)
-        Arrays.sort(assets, Comparator.comparingDouble(a -> a.returnRate));
+        // -------- Linear Search --------
+        int first = -1, last = -1;
 
-        System.out.println("Ascending Return:");
-        for (Asset a : assets) {
-            System.out.println(a.name + " " + a.returnRate);
+        for (int i = 0; i < logs.length; i++) {
+            if (logs[i].equals(target)) {
+                if (first == -1) first = i;
+                last = i;
+            }
         }
 
-        // Quick Sort Logic (Return DESC + Volatility ASC)
-        Arrays.sort(assets, (a, b) -> {
-            if (b.returnRate != a.returnRate)
-                return Double.compare(b.returnRate, a.returnRate);
-            else
-                return Double.compare(a.volatility, b.volatility);
-        });
+        System.out.println("Linear Search:");
+        System.out.println("First: " + first + " Last: " + last);
 
-        System.out.println("\nSorted (Return DESC + Volatility ASC):");
-        for (Asset a : assets) {
-            System.out.println(a.name + " " + a.returnRate + " Vol:" + a.volatility);
+        // -------- Binary Search --------
+        Arrays.sort(logs);
+
+        int index = Arrays.binarySearch(logs, target);
+
+        int count = 0;
+        for (String s : logs) {
+            if (s.equals(target)) count++;
         }
+
+        System.out.println("\nBinary Search:");
+        System.out.println("Index: " + index + " Count: " + count);
     }
 }
